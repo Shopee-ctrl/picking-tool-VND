@@ -121,15 +121,17 @@
         }
         .banner-left h3 { margin: 0; font-size: 24px; font-weight: 700; }
         .banner-left p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.9; }
-        .banner-right { display: flex; align-items: center; gap: 32px; }
-        .total-box { text-align: right; }
+        
+        .banner-right { display: flex; align-items: center; gap: 24px; }
+        .stats-group { display: flex; gap: 24px; }
+        .total-box { text-align: center; min-width: 80px; }
         .total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.5px; }
-        .total-count { font-size: 36px; font-weight: 800; line-height: 1; margin-top: 4px; }
+        .total-count { font-size: 32px; font-weight: 800; line-height: 1; margin-top: 4px; }
         
         .btn-download-pdf {
             background: #ffffff;
             color: #1d4ed8;
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 8px;
             font-weight: 700;
             font-size: 14px;
@@ -219,7 +221,7 @@
                 box-sizing: border-box;
             }
 
-            /* Ô 1: TRÊN BÊN TRÁI (QR TOP) */
+            /* Ô 1: TRÊN BÊN TRÁI */
             .cell-top-left {
                 grid-column: 1;
                 grid-row: 1;
@@ -227,6 +229,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+                box-sizing: border-box;
             }
 
             .top-left-header {
@@ -253,25 +256,48 @@
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
-                margin-top: 6px;
-            }
-
-            .qr-code-text {
-                font-size: 11pt;
-                font-weight: bold;
-                color: #000;
                 margin-top: 4px;
             }
+            
+            /* Tăng kích thước khung chứa QR lớn hơn để cân đối ô trống */
+            .qr-container {
+                width: 135px;
+                height: 135px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .qr-container img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain;
+            }
 
-            /* Ô 2: TRÊN BÊN PHẢI (SKU NAME & DÒNG CHÚ Ý) */
+            /* Tăng cỡ chữ bên dưới mã QR lên to và đậm rõ nét */
+            .qr-code-text {
+                font-size: 15pt; 
+                font-weight: 900; 
+                color: #000;
+                margin-top: 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+                letter-spacing: 0.5px;
+            }
+
+            /* Ô 2: TRÊN BÊN PHẢI */
             .cell-top-right {
                 grid-column: 2;
                 grid-row: 1;
                 padding: 12px 12px 12px 20px;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-start; /* Nội dung bắt đầu từ trên */
+                justify-content: flex-start;
                 gap: 8px;
+                box-sizing: border-box;
             }
 
             .top-right-header {
@@ -298,26 +324,25 @@
                 overflow: hidden;
             }
 
-            /* DÒNG CHỮ CHÚ Ý MỚI THÊM VÀO ĐƯỢC CHỈNH NỔI BẬT HƠN VÀ ĐẨY XUỐNG DƯỚI */
             .notice-box {
-                margin-top: auto; /* Lệnh này tự động đẩy khối xuống sát dưới cùng của ô */
-                font-size: 11.5pt; /* Cỡ chữ to hơn một chút */
-                font-weight: 800; /* In đậm nét */
+                margin-top: auto;
+                font-size: 11pt;
+                font-weight: 800;
                 color: #000;
-                line-height: 1.4;
-                border: 2px solid #000; /* Viền nét liền, đậm hơn cho nổi bật */
-                padding: 8px 10px;
+                line-height: 1.3;
+                border: 2px solid #000;
+                padding: 6px 10px;
                 background-color: #fff;
             }
 
             .notice-title {
-                font-size: 12pt;
+                font-size: 11.5pt;
                 font-weight: 900;
                 text-decoration: underline;
                 margin-right: 4px;
             }
 
-            /* Ô 3: DƯỚI BÊN TRÁI (QR BOT & TIME) */
+            /* Ô 3: DƯỚI BÊN TRÁI */
             .cell-bottom-left {
                 grid-column: 1;
                 grid-row: 2;
@@ -325,6 +350,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
+                box-sizing: border-box;
             }
 
             .print-time {
@@ -334,7 +360,7 @@
                 margin-top: 6px;
             }
 
-            /* Ô 4: DƯỚI BÊN PHẢI (QUANTITY, LOCATION, SKU) */
+            /* Ô 4: DƯỚI BÊN PHẢI */
             .cell-bottom-right {
                 grid-column: 2;
                 grid-row: 2;
@@ -343,6 +369,7 @@
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: flex-end;
+                box-sizing: border-box;
             }
 
             .sl-box {
@@ -406,9 +433,15 @@
             <p>Ready for A5 Print Layout (Prominent Notice Positioned at Bottom)</p>
         </div>
         <div class="banner-right">
-            <div class="total-box">
-                <div class="total-label">Total Items</div>
-                <div class="total-count" id="totalItems">0</div>
+            <div class="stats-group">
+                <div class="total-box">
+                    <div class="total-label">Total Items</div>
+                    <div class="total-count" id="totalItems">0</div>
+                </div>
+                <div class="total-box">
+                    <div class="total-label">Total Tasks</div>
+                    <div class="total-count" id="totalTasks" style="color: #fef08a;">0</div>
+                </div>
             </div>
             <button class="btn-download-pdf" onclick="window.print()">📄 In Toàn Bộ Lô Tem (Khổ A5 Ngang Chuẩn Mẫu)</button>
         </div>
@@ -556,7 +589,9 @@ function updateTableAndLabels() {
             </tr>
         `;
     });
+    
     document.getElementById('totalItems').innerText = totalQty;
+    document.getElementById('totalTasks').innerText = globalItems.length;
 
     renderLandscapeLabels();
 }
@@ -605,7 +640,7 @@ function renderLandscapeLabels() {
                             <span class="mtvn-code-text">${mtoValue}</span>
                         </div>
                         <div class="qr-wrapper">
-                            <div id="qr-top-${globalIndex}"></div>
+                            <div class="qr-container" id="qr-top-${globalIndex}"></div>
                             <div class="qr-code-text">${headerCode}</div>
                         </div>
                     </div>
@@ -624,7 +659,7 @@ function renderLandscapeLabels() {
                     <!-- Ô 3: BOTTOM LEFT -->
                     <div class="cell-bottom-left">
                         <div class="qr-wrapper" style="margin-bottom: auto;">
-                            <div id="qr-bot-${globalIndex}"></div>
+                            <div class="qr-container" id="qr-bot-${globalIndex}"></div>
                             <div class="qr-code-text" style="text-align: left;">${deviceCode}</div>
                         </div>
                         <div class="print-time">Thời gian in: ${currentPrintTime}</div>
@@ -644,11 +679,12 @@ function renderLandscapeLabels() {
         
         printArea.appendChild(pageDiv);
 
+        // Khởi tạo ảnh QR kích thước 135x135 để hiển thị sắc nét hơn
         if (item.pickingId) {
             new QRCode(document.getElementById(`qr-top-${globalIndex}`), {
                 text: item.pickingId,
-                width: 150,
-                height: 150,
+                width: 135,
+                height: 135,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.M
@@ -658,8 +694,8 @@ function renderLandscapeLabels() {
         if (item.deviceId) {
             new QRCode(document.getElementById(`qr-bot-${globalIndex}`), {
                 text: item.deviceId,
-                width: 150,
-                height: 150,
+                width: 135,
+                height: 135,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.M
