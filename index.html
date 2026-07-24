@@ -62,10 +62,16 @@
             background: #f8fafc;
             border-bottom: 1px solid var(--border-ui);
         }
+        .inputs-row {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+        }
         .input-block {
             display: flex;
             flex-direction: column;
             gap: 8px;
+            flex: 1;
         }
         .input-label {
             font-size: 14px;
@@ -259,7 +265,6 @@
                 margin-top: 4px;
             }
             
-            /* Tăng kích thước khung chứa QR lớn hơn để cân đối ô trống */
             .qr-container {
                 width: 135px;
                 height: 135px;
@@ -275,7 +280,6 @@
                 object-fit: contain;
             }
 
-            /* Tăng cỡ chữ bên dưới mã QR lên to và đậm rõ nét */
             .qr-code-text {
                 font-size: 15pt; 
                 font-weight: 900; 
@@ -346,18 +350,35 @@
             .cell-bottom-left {
                 grid-column: 1;
                 grid-row: 2;
-                padding: 12px;
+                padding: 8px 12px;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
                 box-sizing: border-box;
             }
 
+            /* Dòng Kho Nhận Nổi Bật Siêu Cấp */
+            .receiving-wh-text {
+                font-size: 16pt;
+                font-weight: 900;
+                color: #000;
+                margin-top: 4px;
+                margin-bottom: 2px;
+                line-height: 1.1;
+                word-break: break-word;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                border: 1.5px dashed #000;
+                padding: 2px 6px;
+                display: inline-block;
+                width: fit-content;
+            }
+
             .print-time {
                 font-size: 8.5pt;
                 color: #000;
                 font-weight: bold;
-                margin-top: 6px;
+                margin-top: 2px;
             }
 
             /* Ô 4: DƯỚI BÊN PHẢI */
@@ -414,9 +435,16 @@
     </div>
 
     <div class="inputs-container">
-        <div class="input-block">
-            <div class="input-label">📄 MTO Order Number</div>
-            <input type="text" id="mtoOrderInput" class="input-field" placeholder="Nhập mã MTVN tại đây (Ví dụ: MTVN2607130044)" oninput="updateLabelsOnly()">
+        <div class="inputs-row">
+            <div class="input-block">
+                <div class="input-label">📄 MTO Order Number</div>
+                <input type="text" id="mtoOrderInput" class="input-field" placeholder="Nhập mã MTVN tại đây (Ví dụ: MTVN2607130044)" oninput="updateLabelsOnly()">
+            </div>
+            
+            <div class="input-block">
+                <div class="input-label">🏢 Kho Nhận</div>
+                <input type="text" id="receivingWarehouseInput" class="input-field" placeholder="Nhập tên Kho Nhận tại đây (Ví dụ: VNNL)" oninput="updateLabelsOnly()">
+            </div>
         </div>
         
         <div class="input-block">
@@ -474,6 +502,7 @@
 <script>
 const pasteZone = document.getElementById('pasteZone');
 const mtoOrderInput = document.getElementById('mtoOrderInput');
+const receivingWarehouseInput = document.getElementById('receivingWarehouseInput');
 let globalItems = [];
 let currentSort = { key: '', asc: true };
 
@@ -618,6 +647,7 @@ function renderLandscapeLabels() {
     printArea.innerHTML = '';
     const currentPrintTime = getFormattedDate();
     const mtoValue = mtoOrderInput.value.trim() || "";
+    const receivingWhValue = receivingWarehouseInput.value.trim() || "";
     
     globalItems.forEach((item, index) => {
         let globalIndex = index + 1;
@@ -662,6 +692,7 @@ function renderLandscapeLabels() {
                             <div class="qr-container" id="qr-bot-${globalIndex}"></div>
                             <div class="qr-code-text" style="text-align: left;">${deviceCode}</div>
                         </div>
+                        ${receivingWhValue ? `<div class="receiving-wh-text">Kho Nhận: ${receivingWhValue}</div>` : ''}
                         <div class="print-time">Thời gian in: ${currentPrintTime}</div>
                     </div>
                     
@@ -679,7 +710,6 @@ function renderLandscapeLabels() {
         
         printArea.appendChild(pageDiv);
 
-        // Khởi tạo ảnh QR kích thước 135x135 để hiển thị sắc nét hơn
         if (item.pickingId) {
             new QRCode(document.getElementById(`qr-top-${globalIndex}`), {
                 text: item.pickingId,
